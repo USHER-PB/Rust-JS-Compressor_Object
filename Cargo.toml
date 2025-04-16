@@ -1,0 +1,5 @@
+[workspace]
+members = [
+    "rustcompress_rle",
+    "rustcompressor_lz77"
+]
