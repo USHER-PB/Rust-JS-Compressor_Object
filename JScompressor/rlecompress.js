@@ -1,24 +1,22 @@
-
-    function compress(buffer) {
-        const result = [];
-        let i = 0;
-    
-        while (i < buffer.length) {
-            let count = 1;
-            const current = buffer[i];
-    
-            while (i + count < buffer.length && buffer[i + count] === current && count < 255) {
-                count++;
-            }
-    
-            result.push(current);
-            result.push(count);
-            i += count;
-        }
-    
-        return Buffer.from(result);
+function compress_rle(contents) {
+    let result = "";
+    let i = 0;
+  
+    while (i < contents.length) {
+      let count = 1;
+      while (i + 1 < contents.length && contents[i] === contents[i + 1]) {
+        count++;
+        i++;
+      }
+  
+      result += contents[i] , count;
+      i++;
     }
+  
+    return Buffer.from(result);
+  }
 
-    module.exports = {
-        compress,
-    }; 
+// console.log(compress_rle("aaabbcccc")); 
+module.exports = compress_rle;
+
+
