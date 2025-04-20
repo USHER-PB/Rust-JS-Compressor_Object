@@ -1,5 +1,15 @@
 {
-  "dependencies": {
-    "mocha": "^11.1.0"
+  "name": "jscompressor",
+  "version": "1.0.0",
+  "description": "RLE and LZ77 compressor in JS",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [],
+  "author": "usherking",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^10.2.0"
   }
 }
