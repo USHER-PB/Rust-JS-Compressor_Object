@@ -8,8 +8,8 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  RUST_IMAGE_NAME: ${{ github.repository }}/rust-compressor
-  JS_IMAGE_NAME: ${{ github.repository }}/js-compressor
+  RUST_IMAGE_NAME: ${{ github.repository }}/rustcompress_rle
+  JS_IMAGE_NAME: ${{ github.repository }}/JScompressor
 
 jobs:
   build-and-push:
@@ -21,10 +21,15 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: rust-compressor
-            dockerfile: ./rust-compressor/Dockerfile
-            context: ./rust-compressor
-            image: ghcr.io/${{ github.repository }}/rust-compressor
+          - name: rustcompress_rle
+            dockerfile: .rustcompress_rle/Dockerfile
+            context: ./rustcompress_rle
+            image: ghcr.io/${{ github.repository }}/rustcompress_rle
+
+          - name: rustcompress_rle
+            dockerfile: .rustcompress_rle/Dockerfile
+            context: ./rustcompress_rle
+            image: ghcr.io/${{ github.repository }}/rustcompress_rle
           - name: js-compressor
             dockerfile: ./js-compressor/Dockerfile
             context: ./js-compressor
