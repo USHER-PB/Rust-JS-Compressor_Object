@@ -24,12 +24,12 @@ jobs:
       matrix:
         include:
           - name: rustcompress_rle
-            dockerfile: .rustcompress_rle/Dockerfile
+            dockerfile: rustcompress_rle/Dockerfile
             context: ./rustcompress_rle
             image: ghcr.io/${{ github.repository }}/rustcompress_rle
 
           - name: rustcompressor_lz77
-            dockerfile: .rustcompressor_lz77/Dockerfile
+            dockerfile: rustcompressor_lz77/Dockerfile
             context: ./rustcompressor_lz77
             image: ghcr.io/${{ github.repository }}/rustcompressor_lz77
 
