@@ -75,7 +75,6 @@ function packCompressedData(entries) {
     let result = [];
     let pos = 0;
 
-    // If input is string (from fs.readFileSync with encoding), convert to Buffe
     console.log("Buffer (ascii):", buffer.toString('ascii'));
 
     while (pos < buffer.length) {
@@ -89,18 +88,19 @@ function packCompressedData(entries) {
             result.push(char);
         } else if (tag === 0x01) {
             // Match
-            const offset = buffer[pos];
-            pos++;
-            const length = buffer[pos];
-            pos++;
-            const nextChar = buffer[pos];
-            pos++;
+            const offset = buffer[pos++];
+            const length = buffer[pos++];
+            const nextChar = buffer[pos++];
 
             const start = result.length - offset;
+
             for (let i = 0; i < length; i++) {
                 result.push(result[start + i]);
             }
-            result.push(nextChar);
+
+            if (nextChar !== 0) {
+                result.push(nextChar);
+            }
         } else {
             throw new Error(`Invalid tag: ${tag}`);
         }
@@ -108,6 +108,7 @@ function packCompressedData(entries) {
 
     return Buffer.from(result);
 }
+
 // Example usage of compression and decompression 
 // // Example usage:
 // const compressedData = [

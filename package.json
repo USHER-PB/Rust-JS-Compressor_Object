@@ -1,4 +1,13 @@
 {
+  "name": "jscompressor",
+  "version": "1.0.0",
+  "description": "RLE and LZ77 compressor in JS",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "usherking",
+  "license": "MIT",
   "devDependencies": {
     "mocha": "^11.1.0"
   }
