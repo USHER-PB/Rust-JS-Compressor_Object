@@ -13,6 +13,10 @@ env:
   JS_IMAGE_NAME: ${{ github.repository }}/JScompressor
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10 
+
   build-and-push:
     runs-on: ubuntu-latest
     permissions:
