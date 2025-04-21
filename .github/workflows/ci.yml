@@ -26,14 +26,15 @@ jobs:
             context: ./rustcompress_rle
             image: ghcr.io/${{ github.repository }}/rustcompress_rle
 
-          - name: rustcompress_rle
-            dockerfile: .rustcompress_rle/Dockerfile
-            context: ./rustcompress_rle
-            image: ghcr.io/${{ github.repository }}/rustcompress_rle
-          - name: js-compressor
-            dockerfile: ./js-compressor/Dockerfile
-            context: ./js-compressor
-            image: ghcr.io/${{ github.repository }}/js-compressor
+          - name: rustcompressor_lz77
+            dockerfile: .rustcompressor_lz77/Dockerfile
+            context: ./rustcompressor_lz77
+            image: ghcr.io/${{ github.repository }}/rustcompressor_lz77
+
+          - name: JScompressor
+            dockerfile: ./JScompressor/Dockerfile
+            context: ./JScompressor
+            image: ghcr.io/${{ github.repository }}/JScompressor
 
     steps:
       - name: Checkout repository
