@@ -24,11 +24,11 @@ jobs:
           - name: rust-compressor
             dockerfile: ./rust-compressor/Dockerfile
             context: ./rust-compressor
-            image: ${{ env.REGISTRY }}/${{ env.RUST_IMAGE_NAME }}
+            image: ghcr.io/${{ github.repository }}/rust-compressor
           - name: js-compressor
             dockerfile: ./js-compressor/Dockerfile
             context: ./js-compressor
-            image: ${{ env.REGISTRY }}/${{ env.JS_IMAGE_NAME }}
+            image: ghcr.io/${{ github.repository }}/js-compressor
 
     steps:
       - name: Checkout repository
