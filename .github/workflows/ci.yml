@@ -1,0 +1,62 @@
+name: Build and Publish Docker Images
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  REGISTRY: ghcr.io
+  RUST_IMAGE_NAME: ${{ github.repository }}/rust-compressor
+  JS_IMAGE_NAME: ${{ github.repository }}/js-compressor
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    strategy:
+      matrix:
+        include:
+          - name: rust-compressor
+            dockerfile: ./rust-compressor/Dockerfile
+            context: ./rust-compressor
+            image: ${{ env.REGISTRY }}/${{ env.RUST_IMAGE_NAME }}
+          - name: js-compressor
+            dockerfile: ./js-compressor/Dockerfile
+            context: ./js-compressor
+            image: ${{ env.REGISTRY }}/${{ env.JS_IMAGE_NAME }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ matrix.image }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=sha
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.dockerfile }}
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }} 
