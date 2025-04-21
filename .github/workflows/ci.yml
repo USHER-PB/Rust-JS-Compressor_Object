@@ -15,13 +15,10 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 10 
-
-  build-and-push:
-    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
+    timeout-minutes: 10
 
     strategy:
       matrix:
@@ -70,4 +67,4 @@ jobs:
           file: ${{ matrix.dockerfile }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }} 
+          labels: ${{ steps.meta.outputs.labels }}
