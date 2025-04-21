@@ -1,74 +1,47 @@
 function compress_rle(contents) {
-    // Convert buffer to string if it's a buffer
-    let result = "";
-    let i = 0;
-  
-    while (i < contents.length) {
-      let count = 1;
-      while (i + 1 < contents .length && contents [i] === contents [i + 1]) {
-        count++;
-        i++;
-      }
-  
-      result += contents [i];
-      result += count;
+  if (Buffer.isBuffer(contents)) {
+    contents = contents.toString(); // Convert buffer to string
+  }
+
+  let result = [];
+
+  let i = 0;
+  while (i < contents.length) {
+    let count = 1;
+    while (i + 1 < contents.length && contents[i] === contents[i + 1]) {
+      count++;
       i++;
     }
-  
-    return Buffer.from(result);
+
+    result.push(contents.charCodeAt(i)); // store actual byte value
+    result.push(count);                  // store count as byte
+    i++;
+  }
+
+  return Buffer.from(result);
 }
+
 
 // console.log(compress_rle("aaabbcccc"))
-function decompress_rle(contents ) {
-  // contents  validation
-  if (!contents  || !Buffer.isBuffer(contents )) {
-    throw new Error('contents  must be a valid Buffer');
+function decompress_rle(contents) {
+  if (!contents || !Buffer.isBuffer(contents)) {
+    throw new Error('Input must be a Buffer');
   }
 
-  // Convert buffer to string
-  const compressedString = contents.toString('utf8');
-  console.log('Decompression input:', compressedString);
-  
-  let decompressedResult = '';
-  let currentChar = '';
-  let currentCount = '';
+  let result = "";
 
-  // Process each character
-  for (let i = 0; i < compressedString.length; i++) {
-    const char = compressedString[i];
-    
-    if (/\d/.test(char)) {
-      // If it's a digit, add it to the count
-      currentCount += char;
-    } else {
-      // If we have a previous character and count, process them
-      if (currentChar && currentCount) {
-        const count = parseInt(currentCount, 10);
-        if (count > 0 && count <= 1000) {
-          decompressedResult += currentChar.repeat(count);
-        }
-      }
-      // Start new character
-      currentChar = char;
-      currentCount = '';
-    }
+  for (let i = 0; i < contents.length; i += 2) {
+    const byte = contents[i];       // actual byte
+    const count = contents[i + 1];  // how many times to repeat
+
+
+    const char = String.fromCharCode(byte); // convert byte to character
+    result += char.repeat(count);           // build up the result string
   }
-
-  // Handle the last character and count
-  if (currentChar && currentCount) {
-    const count = parseInt(currentCount, 10);
-    if (count > 0 && count <= 1000) {
-      decompressedResult += currentChar.repeat(count);
-    }
-  }
-
-  if (decompressedResult.length === 0) {
-    throw new Error('Decompression resulted in empty string');
-  }
-
-  console.log('Decompression output:', decompressedResult);
-  return decompressedResult;
+   console.log("string version :" , result)
+  return result; // return as string
 }
+
 
 module.exports = {
   compress_rle,

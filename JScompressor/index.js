@@ -59,12 +59,14 @@ if (!result || result.length === 0) {
 console.log(`Writing to file: ${outputPath}`);
 try {
     if (mode === "compress") {
-        if (Buffer.isBuffer(result)) {
-            fs.writeFileSync(outputPath, result.toString('hex')); // or use 'base64'
-          } else if (mode === "decompress"){
-            fs.writeFileSync(outputPath, compressedOutput); // Assuming result is a string
-          }
-        }
+    if (Buffer.isBuffer(result)) {
+        fs.writeFileSync(outputPath, result); // ✅ binary write
+        console.log("Preview (hex):", result.toString("hex")); // just for inspection
+
+    }
+} else if (mode === "decompress") {
+    fs.writeFileSync(outputPath, result); // ✅ decompress result is a Buffer too
+}
     // Verify the file was written
     if (!fs.existsSync(outputPath)) {
         console.error("Error: Output file was not created");
@@ -74,7 +76,7 @@ try {
     const writtenContent = fs.readFileSync(outputPath);
     console.log(`Written file size: ${writtenContent.length} bytes`);
     console.log(`Written content (hex):`, writtenContent);
-    console.log(`✅ ${mode}ion complete! Output saved to ${outputPath}`);
+    console.log(`${mode}ion complete! Output saved to ${outputPath}`);
 } catch (error) {
     console.error(`Error writing to file: ${error.message}`);
     process.exit(1);
