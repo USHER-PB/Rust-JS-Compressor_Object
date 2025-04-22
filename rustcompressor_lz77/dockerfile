@@ -7,14 +7,17 @@ WORKDIR /usr/src/app
 # Copy only Cargo.toml first to cache dependencies
 COPY Cargo.toml .
 
-# Create a dummy src/main.rs to pre-cache dependencies
-RUN mkdir src && echo "fn main() {}" > src/main.rs
+# Create necessary directories and dummy files
+RUN mkdir -p src benches && \
+    echo "fn main() {}" > src/main.rs && \
+    echo "pub fn dummy() {}" > src/lib.rs && \
+    echo "use criterion::{black_box, criterion_group, criterion_main, Criterion};" > benches/benchmark.rs
 
 # Build dependencies first (this caches layers)
 RUN cargo build --release
 
-# Remove dummy main file
-RUN rm -rf src
+# Remove dummy files
+RUN rm -rf src benches
 
 # Copy the full project source
 COPY . .
@@ -22,5 +25,8 @@ COPY . .
 # Final build
 RUN cargo build --release
 
-# Set the compiled binary as the default command
-ENTRYPOINT ["./target/release/rustcompressor_lz77"]
+# Copy the binary to a known location
+RUN cp target/release/rustcompressor_lz77 /usr/local/bin/
+
+# Set the entrypoint to the binary
+ENTRYPOINT ["/usr/local/bin/rustcompressor_lz77"]
