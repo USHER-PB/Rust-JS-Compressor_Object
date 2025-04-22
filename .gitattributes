@@ -2,3 +2,6 @@
 Makefile linguist-vendored
 *.mk linguist-vendored
 *.make linguist-vendored
+
+*.rs linguist-language=Rust
+*.js linguist-language=JavaScript
