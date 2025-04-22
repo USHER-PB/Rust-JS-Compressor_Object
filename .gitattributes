@@ -1,0 +1,4 @@
+# Ignore Makefile from language stats
+Makefile linguist-vendored
+*.mk linguist-vendored
+*.make linguist-vendored
