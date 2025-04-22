@@ -1,83 +1,83 @@
+#!/usr/bin/env node
+
 const fs = require("fs");
+const path = require("path");
 const { compress_rle, decompress_rle } = require("./rlecompress");
-const { compress_lz77, packCompressedData, decompress_lz77 } = require("./lz77compress"); // Assuming this file has the decompress_lz77 method
+const { compress_lz77, packCompressedData, decompress_lz77 } = require("./lz77compress");
 
-const [mode, inputPath, outputPath, conversion_style] = process.argv.slice(2);
+const [,, mode, ...rest] = process.argv;
 
-// Check if input file exists
-if (!fs.existsSync(inputPath)) {
-    console.error(`Error: Input file '${inputPath}' does not exist`);
+const method = rest.includes("--rle") ? "--rle" : rest.includes("--lz") ? "--lz" : null;
+const methodIndex = rest.findIndex(arg => arg === "--rle" || arg === "--lz");
+
+if (!method || methodIndex === -1) {
+    console.error("❌ Please specify --rle or --lz");
     process.exit(1);
 }
 
-console.log(`Reading file: ${inputPath}`);
-const contents = fs.readFileSync(inputPath);
-console.log(`Input file size: ${contents.length} bytes`);
-console.log(`Input content (first 100 bytes):`, contents.slice(0, 100).toString('utf8'));
+const files = rest.slice(0, methodIndex);
+const outputPath = rest[methodIndex + 1]; // Assume output path is right after --rle or --lz
 
-let result;
-
-if (conversion_style === "--rle") {
-    console.log(`Using RLE ${mode}ion`);
-    try {
-        result = mode === "compress" ? compress_rle(contents) : decompress_rle(contents);
-        console.log(`Result size: ${result.length} bytes`);
-    } catch (error) {
-        console.error(`Error during ${mode}ion:`, error.message);
-        process.exit(1);
-    }
-} else if (conversion_style === "--lz") {
-    console.log("LZ77 method used for conversion");
-    try {
-        if (mode === "compress") {
-            // Compression
-            const compressedOutput = compress_lz77(contents); // Convert to string before compression
-            result = packCompressedData(compressedOutput); // Pack the compressed output
-        } else if (mode === "decompress") {
-            // Decompression
-            const compressedContents = fs.readFileSync(inputPath);  // Read compressed contents
-            // The issue was here: You were using decompress_rle.  Use decompress_lz77
-            const decompressed = decompress_lz77(compressedContents)
-            result = decompressed; // Set the result to the decompressed content.
-        }
-        console.log(`Result size: ${result.length} bytes`); // Prints the buffer size, or the decompressed string length
-    } catch (error) {
-        console.error(`Error during ${mode}ion:`, error.message);
-        process.exit(1);
-    }
-} else {
-    console.error("Invalid conversion_style");
+if (!["compress", "decompress"].includes(mode)) {
+    console.error("❌ Mode must be 'compress' or 'decompress'");
+    process.exit(1);
+}
+if (!outputPath) {
+    console.error("❌ Please specify output file name after the compression method");
     process.exit(1);
 }
 
-// Verify result is not empty
-if (!result || result.length === 0) {
-    console.error("Error: Result is empty");
-    process.exit(1);
-}
+let finalBuffer;
 
-console.log(`Writing to file: ${outputPath}`);
 try {
     if (mode === "compress") {
-    if (Buffer.isBuffer(result)) {
-        fs.writeFileSync(outputPath, result); // ✅ binary write
-        console.log("Preview (hex):", result.toString("hex")); // just for inspection
+        const results = [];
 
+        for (const inputPath of files) {
+            if (!fs.existsSync(inputPath)) {
+                console.error(`❌ File not found: ${inputPath}`);
+                continue;
+            }
+
+            const contents = fs.readFileSync(inputPath);
+
+            let compressed;
+            if (method === "--rle") {
+                compressed = compress_rle(contents);
+            } else {
+                const temp = compress_lz77(contents);
+                compressed = packCompressedData(temp);
+            }
+
+            results.push(compressed);
+            console.log(`✅ Compressed: ${inputPath} (${compressed.length} bytes)`);
+        }
+
+        // Combine all into a single Buffer
+        finalBuffer = Buffer.concat(results);
+        fs.writeFileSync(outputPath, finalBuffer);
+        console.log(`🎉 All compressed outputs written to ${outputPath}`);
+
+    } else if (mode === "decompress") {
+        const inputPath = files[0];
+        if (!fs.existsSync(inputPath)) {
+            console.error(`❌ Input file not found: ${inputPath}`);
+            process.exit(1);
+        }
+
+        const contents = fs.readFileSync(inputPath);
+        let result;
+
+        if (method === "--rle") {
+            result = decompress_rle(contents);
+        } else {
+            result = decompress_lz77(contents);
+        }
+
+        fs.writeFileSync(outputPath, result);
+        console.log(`✅ Decompressed output written to ${outputPath}`);
     }
-} else if (mode === "decompress") {
-    fs.writeFileSync(outputPath, result); // ✅ decompress result is a Buffer too
-}
-    // Verify the file was written
-    if (!fs.existsSync(outputPath)) {
-        console.error("Error: Output file was not created");
-        process.exit(1);
-    }
-    // Read back the file to verify content
-    const writtenContent = fs.readFileSync(outputPath);
-    console.log(`Written file size: ${writtenContent.length} bytes`);
-    console.log(`Written content (hex):`, writtenContent);
-    console.log(`${mode}ion complete! Output saved to ${outputPath}`);
-} catch (error) {
-    console.error(`Error writing to file: ${error.message}`);
+} catch (err) {
+    console.error("❌ Error:", err.message);
     process.exit(1);
 }
