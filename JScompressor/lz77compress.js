@@ -71,43 +71,34 @@ function packCompressedData(entries) {
     }
     return Buffer.from(bufferArray);
   }
-  function decompress_lz77(buffer) {
-    let result = [];
+  function decompress_lz77(entries) {
+    let result = '';
     let pos = 0;
 
-    console.log("Buffer (ascii):", buffer.toString('ascii'));
-
-    while (pos < buffer.length) {
-        const tag = buffer[pos];
+    while (pos < entries.length) {
+      const entry = entries[pos];
+      
+      if (entry.tag === 0) {
+        // Literal
+        result += entry.nextChar;
         pos++;
-
-        if (tag === 0x00) {
-            // Literal
-            const char = buffer[pos];
-            pos++;
-            result.push(char);
-        } else if (tag === 0x01) {
-            // Match
-            const offset = buffer[pos++];
-            const length = buffer[pos++];
-            const nextChar = buffer[pos++];
-
-            const start = result.length - offset;
-
-            for (let i = 0; i < length; i++) {
-                result.push(result[start + i]);
-            }
-
-            if (nextChar !== 0) {
-                result.push(nextChar);
-            }
-        } else {
-            throw new Error(`Invalid tag: ${tag}`);
+      } else if (entry.tag === 1) {
+        // Match
+        const start = result.length - entry.offset;
+        for (let i = 0; i < entry.length; i++) {
+          result += result[start + i];
         }
+        if (entry.nextChar) {
+          result += entry.nextChar;
+        }
+        pos++;
+      } else {
+        throw new Error(`Invalid tag: ${entry.tag}`);
+      }
     }
 
-    return Buffer.from(result);
-}
+    return result;
+  }
 
 // Example usage of compression and decompression 
 // // Example usage:

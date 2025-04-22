@@ -1,0 +1,53 @@
+This is a large test file for compression benchmarking.
+It contains extensive patterns and repetitions to thoroughly test the compression algorithms.
+
+Section 1: Simple Repetitions
+${'a'.repeat(1000)}
+${'b'.repeat(1000)}
+${'c'.repeat(1000)}
+
+Section 2: Pattern Repetitions
+${'abc'.repeat(500)}
+${'def'.repeat(500)}
+${'ghi'.repeat(500)}
+
+Section 3: Longer Patterns
+${'abcdefghijklmnopqrstuvwxyz'.repeat(100)}
+${'zyxwvutsrqponmlkjihgfedcba'.repeat(100)}
+
+Section 4: Mixed Content
+${'Lorem ipsum dolor sit amet, '.repeat(200)}
+${'consectetur adipiscing elit. '.repeat(200)}
+${'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. '.repeat(200)}
+
+Section 5: Binary-like Patterns
+${'01010101010101010101010101010101'.repeat(100)}
+${'10101010101010101010101010101010'.repeat(100)}
+
+Section 6: Random Text
+${'The quick brown fox jumps over the lazy dog. '.repeat(300)}
+${'Pack my box with five dozen liquor jugs. '.repeat(300)}
+${'How vexingly quick daft zebras jump! '.repeat(300)}
+
+Section 7: Final Patterns
+${'xyz'.repeat(500)}
+${'123'.repeat(500)}
+${'789'.repeat(500)}
+
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+abcabcabcabcabcabcabcabcabcabcabcabcabcabc
+defdefdefdefdefdefdefdefdefdefdefdefdefdef
+123123123123123123123123123123123123123123
+The quick brown fox jumps over the lazy dog.
+The quick brown fox jumps over the lazy dog.
+The quick brown fox jumps over the lazy dog.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+XYXYXYXYXYXYXYXYXYXYXYXYXYXYXYXYXYXYXYXY
+0101010101010101010101010101010101010101
+AAAAABBBBBCCCCCDDDDDEEEEEFFFFF
+AAAAABBBBBCCCCCDDDDDEEEEEFFFFF
+AAAAABBBBBCCCCCDDDDDEEEEEFFFFF 

@@ -1,0 +1,11 @@
+This is a small test file for compression benchmarking.
+It contains some repeated patterns like aaa bbb ccc.
+And some longer repeated sequences like abcabcabc.
+This should be good for testing both RLE and LZ77 compression.
+
+aaabbbccc
+abcabcabc
+HelloHelloHello
+123123123
+XYXYXY
+aaaaabbbbbccccc 

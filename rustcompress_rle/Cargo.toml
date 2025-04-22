@@ -1,6 +1,17 @@
 [package]
 name = "rustcompress_rle"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
+
+[lib]
+name = "rustcompress_rle"
+path = "src/lib.rs"
 
 [dependencies]
+
+[dev-dependencies]
+criterion = "0.5"
+
+[[bench]]
+name = "benchmark"
+harness = false
