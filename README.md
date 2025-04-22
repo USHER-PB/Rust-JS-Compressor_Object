@@ -46,7 +46,7 @@ npm install
 docker build -t jscompressor .
 ```
 
-## 🛠️ Usage
+##  Usage
 
 ### Rust CLI
 ```bash
@@ -79,7 +79,7 @@ node index.js decompress input.txt output.txt --lz  # if you want to decompress 
 docker run --rm -v $(pwd):/data JScompressor compress /data/input.txt /data/output.txt.rle
 ```
 
-## 🧪 Testing
+## Testing
 
 ### Rust Tests
 ```bash
@@ -93,7 +93,7 @@ cd JScompressor
 npm test
 ```
 
-## 📊 Benchmarking
+## Benchmarking
 
 Run benchmarks to compare performance:
 
@@ -107,7 +107,7 @@ cd JScompressor
 node benchmark.js
 ```
 
-## 🐳 Docker Images
+##  Docker Images
 
 Docker images are available on GitHub Container Registry:
 
