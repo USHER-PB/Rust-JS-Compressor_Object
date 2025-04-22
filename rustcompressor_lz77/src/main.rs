@@ -1,5 +1,5 @@
 use std::{env, fs};
-use rustcompress_rle::{compress, decompress};
+use rustcompressor_lz77::{compress_lz77, decompress_lz77};
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -16,9 +16,9 @@ fn main() {
     };
 
     let result = if choice == "compress" {
-        compress(&contents)
+        compress_lz77(&contents) // Use compress_lz77
     } else if choice == "decompress" {
-        decompress(&contents)
+        decompress_lz77(contents.as_bytes()).into_bytes() // Convert String to Vec<u8>
     } else {
         eprintln!("Unknown choice: {}", choice);
         return;

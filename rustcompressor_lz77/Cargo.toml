@@ -3,6 +3,11 @@ name = "rustcompressor_lz77"
 version = "0.1.0"
 edition = "2021"
 
+
+[lib]
+name = "rustcompressor_lz77"
+path = "src/lib.rs"
+
 [dependencies]
 
 [dev-dependencies]

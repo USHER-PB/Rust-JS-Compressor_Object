@@ -1,7 +1,7 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 use std::fs;
 use std::path::Path;
-use rustcompressor_lz77::lz77::{compress_lz77, decompress_lz77};
+use rustcompressor_lz77::{compress_lz77, decompress_lz77};
 
 fn bench_compression(c: &mut Criterion) {
     let test_files = [

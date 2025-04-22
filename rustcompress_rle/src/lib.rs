@@ -1,14 +1,3 @@
-pub mod lib {
-    pub fn compress_rle(input: &str) -> Vec<u8> {
-        // Your RLE compression implementation
-        vec![]
-    }
-
-    pub fn decompress_rle(input: &[u8]) -> String {
-        // Your RLE decompression implementation
-        String::new()
-    }
-}
 
 pub fn compress(input: &str) -> String {
     let mut result = String::new();

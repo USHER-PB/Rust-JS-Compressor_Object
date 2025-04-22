@@ -1,4 +1,4 @@
-pub mod lz77 {
+
     pub fn compress_lz77(input: &str) -> Vec<u8> {
         let window_size = 4096;
         let lookahead_size = 18;
@@ -85,4 +85,3 @@ pub mod lz77 {
 
         result
     }
-} 
