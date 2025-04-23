@@ -75,7 +75,7 @@ try {
         }
 
         fs.writeFileSync(outputPath, result);
-        console.log(`✅ Decompressed output written to ${outputPath}`);
+        console.log(` Decompressed output written to ${outputPath}`);
     }
 } catch (err) {
     console.error(" Error:", err.message);
