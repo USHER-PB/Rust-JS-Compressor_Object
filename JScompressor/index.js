@@ -11,7 +11,7 @@ const method = rest.includes("--rle") ? "--rle" : rest.includes("--lz") ? "--lz"
 const methodIndex = rest.findIndex(arg => arg === "--rle" || arg === "--lz");
 
 if (!method || methodIndex === -1) {
-    console.error("❌ Please specify --rle or --lz");
+    console.error(" Please specify --rle or --lz");
     process.exit(1);
 }
 
@@ -19,11 +19,11 @@ const files = rest.slice(0, methodIndex);
 const outputPath = rest[methodIndex + 1]; // Assume output path is right after --rle or --lz
 
 if (!["compress", "decompress"].includes(mode)) {
-    console.error("❌ Mode must be 'compress' or 'decompress'");
+    console.error(" Mode must be 'compress' or 'decompress'");
     process.exit(1);
 }
 if (!outputPath) {
-    console.error("❌ Please specify output file name after the compression method");
+    console.error(" Please specify output file name after the compression method");
     process.exit(1);
 }
 
@@ -35,7 +35,7 @@ try {
 
         for (const inputPath of files) {
             if (!fs.existsSync(inputPath)) {
-                console.error(`❌ File not found: ${inputPath}`);
+                console.error(` File not found: ${inputPath}`);
                 continue;
             }
 
@@ -50,18 +50,18 @@ try {
             }
 
             results.push(compressed);
-            console.log(`✅ Compressed: ${inputPath} (${compressed.length} bytes)`);
+            console.log(` Compressed: ${inputPath} (${compressed.length} bytes)`);
         }
 
         // Combine all into a single Buffer
         finalBuffer = Buffer.concat(results);
         fs.writeFileSync(outputPath, finalBuffer);
-        console.log(`🎉 All compressed outputs written to ${outputPath}`);
+        console.log(` All compressed outputs written to ${outputPath}`);
 
     } else if (mode === "decompress") {
         const inputPath = files[0];
         if (!fs.existsSync(inputPath)) {
-            console.error(`❌ Input file not found: ${inputPath}`);
+            console.error(` Input file not found: ${inputPath}`);
             process.exit(1);
         }
 
@@ -78,6 +78,6 @@ try {
         console.log(`✅ Decompressed output written to ${outputPath}`);
     }
 } catch (err) {
-    console.error("❌ Error:", err.message);
+    console.error(" Error:", err.message);
     process.exit(1);
 }
